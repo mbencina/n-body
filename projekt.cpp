@@ -4,11 +4,94 @@
 #include <stdlib.h>
 #include "base_func.h"
 
-
-
-void openmp(double* m, double* x, double* y, double* z, double** r, double* Fx, double* Fy, double* Fz, int N, int iteracije)
+void print_iteration(double* x, double* y, double* z, double* vx, double* vy, double* vz, int N, int iter)
 {
+    int i;
+    printf("ITERATION %d\n",iter);
 
+    printf("x:  %.2f", x[0]);
+    for (i = 1; i < N; i++)
+        printf(", %.2f",x[i]);
+    
+    printf("\ny:  %.2f", y[0]);
+    for (i = 1; i < N; i++)
+        printf(", %.2f",y[i]);
+    
+    printf("\nz:  %.2f", z[0]);
+    for (i = 1; i < N; i++)
+        printf(", %.2f",z[i]);
+
+    printf("\nvx: %.2f", vx[0]);
+    for (i = 1; i < N; i++)
+        printf(", %.2f",vx[i]);
+    
+    printf("\nvy: %.2f", vy[0]);
+    for (i = 1; i < N; i++)
+        printf(", %.2f",vy[i]);
+    
+    printf("\nvz: %.2f", vz[0]);
+    for (i = 1; i < N; i++)
+        printf(", %.2f",vz[i]);   
+    
+    printf("\n");
+}
+
+void openmp(double* m, double* x, double* y, double* z, double* vx, double* vy, double* vz, double** r, double* Fx, double* Fy, double* Fz, int N, int iteracije)
+{
+    for(int iter = 0; iter<iteracije; iter++)
+    {
+        //poracunamo R (sprememba pozicije)
+        int i,j;
+        #pragma omp parallel for collapse(2)
+        for (i = 0; i < N; i++)
+            for (j = 0; j < N; j++)
+                r[i][j]  = calculate_rij(x, y, z, r, i, j);
+
+        
+        //poracunamo sile
+        for (i = 0; i < N; i++)
+        {
+            double sum_x = 0.0;
+            double sum_y = 0.0;
+            double sum_z = 0.0;
+            #pragma omp parallel for reduction(+:sum_x,sum_y,sum_z)
+            for (j = 0; j < N; j++) //mogoce preverimo ce je hitrej, da je vsaka v svoji for zanki: zarad memori dostopov ...
+            {
+                sum_x = calculate_force(m, x, r, i, j);
+                sum_y = calculate_force(m, x, r, i, j);
+                sum_z = calculate_force(m, x, r, i, j); 
+            }
+            Fx[i] = -1 * GRAV_CONST * m[i] * sum_x;
+            Fy[i] = -1 * GRAV_CONST * m[i] * sum_y;
+            Fz[i] = -1 * GRAV_CONST * m[i] * sum_z;		
+        }
+
+        //poracunamo nove hitrosti
+        #pragma omp parallel
+        for (i = 0; i < N; i++)
+            vx[i] = update_velocity(vx, Fx, m, i);
+        #pragma omp parallel
+        for (i = 0; i < N; i++)
+            vy[i] = update_velocity(vy, Fy, m, i);
+        #pragma omp parallel
+        for (i = 0; i < N; i++)
+            vz[i] = update_velocity(vz, Fz, m, i);
+
+
+        //poracunamo nove pozicije
+        #pragma omp parallel
+        for (i = 0; i < N; i++)
+            x[i] = update_position(x, vx, Fx, m, i);
+        #pragma omp parallel
+        for (i = 0; i < N; i++)
+            y[i] = update_position(y, vy, Fy, m, i);
+        #pragma omp parallel
+        for (i = 0; i < N; i++)
+            z[i] = update_position(z, vz, Fz, m, i);
+
+        
+        print_iteration(x, y, z, vx, vy, vz, N, iter);
+	}
 
 }
 
@@ -16,17 +99,19 @@ void openmp(double* m, double* x, double* y, double* z, double** r, double* Fx, 
 
 int main(int argc, char *argv[]) 
 {
-
+    //---------------------------------------------------------------------------
+    // START OF INITIALIZATION
+    //---------------------------------------------------------------------------
 	int N = atoi(argv[1]); // stevilo delcev
     int iteracije = atoi(argv[2]);
 
-    double* m =  _init(N, 1.0, 10.0); //mase
-    double* x =  _init(N, 0.0, 10.0); //x-koordinate
-    double* y =  _init(N, 0.0, 10.0); //y-koordinate
-    double* z =  _init(N, 0.0, 10.0); //z-koordinate
-    double* vx = _init(N, 0.0, 10.0); //hitrost v x-koordinati
-    double* vy = _init(N, 0.0, 10.0); //hitrost v y-koordinati
-    double* vz = _init(N, 0.0, 10.0); //hitrost v z-koordinati
+    double* m =  _init(N, 1.0, 100.0); //mase
+    double* x =  _init(N, -10.0, 10.0); //x-koordinate
+    double* y =  _init(N, -10.0, 10.0); //y-koordinate
+    double* z =  _init(N, -10.0, 10.0); //z-koordinate
+    double* vx = _init(N, -10.0, 10.0); //hitrost v x-koordinati
+    double* vy = _init(N, -10.0, 10.0); //hitrost v y-koordinati
+    double* vz = _init(N, -10.0, 10.0); //hitrost v z-koordinati
 
     double** r = r_init(N);           //inicializiramo prazen array
     
@@ -34,17 +119,17 @@ int main(int argc, char *argv[])
     double* Fy = (double*)malloc(sizeof(double) * N);
     double* Fz = (double*)malloc(sizeof(double) * N);
 
-    r  = calculate_rij(N, x, y, z, r);    //poracunamo vrednosti glede na hitrosti
-    Fx = calculate_force(N, m, x, r, Fx); //poracunamo sile v x-koordinati
-    Fy = calculate_force(N, m, y, r, Fy); //poracunamo sile v y-koordinati
-    Fz = calculate_force(N, m, z, r, Fz); //poracunamo sile v z-koordinati
+    //---------------------------------------------------------------------------
+    // END OF INITIALIZATION
+    //---------------------------------------------------------------------------
 
-	//OpenMP solution
-	//double start_recursive = omp_get_wtime();
-	openmp(m, x, y, z, r, Fx, Fy, Fz, N, iteracije);
-	//double end_recursive = omp_get_wtime();
+
+	// OpenMP solution
+	double start_openmp = omp_get_wtime();
+	openmp(m, x, y, z, vx, vy, vz, r, Fx, Fy, Fz, N, iteracije);
+	double end_openmp = omp_get_wtime();
     
     //print results
-	//printf("Time openmpi: %f s\n", end_recursive-start_recursive);
+	printf("Time openmpi: %f s\n", end_openmp-start_openmp);
 	return 0;
 }

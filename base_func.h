@@ -38,10 +38,10 @@ double** r_init(int N)
 }
 
 
-double calculate_rij(double* x, double* y, double*z, double** r, int i, int j)
+double calculate_rij(double* x, double* y, double*z, int i, int j)
 {
     double epsilon = 0.00000000000001;
-
+    
 	return sqrt(pow((x[i] - x[j]),2.0) + pow((y[i] - y[j]),2.0) + pow((z[i] - z[j]),2.0) + epsilon);
 }
 

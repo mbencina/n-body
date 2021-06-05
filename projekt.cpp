@@ -2,7 +2,7 @@
 #include <math.h>
 #include <omp.h>
 #include <stdlib.h>
-#include "base_func.h"
+#include "init_positions.h"
 
 void print_iteration(double* x, double* y, double* z, double* vx, double* vy, double* vz, int N, int iter)
 {
@@ -42,10 +42,10 @@ void openmp(double* m, double* x, double* y, double* z, double* vx, double* vy, 
     {
         //poracunamo R (sprememba pozicije)
         int i,j;
-        #pragma omp parallel for collapse(2)
+        #pragma omp parallel for collapse(2) shared(x,y,z) schedule(static)
         for (i = 0; i < N; i++)
             for (j = 0; j < N; j++)
-                r[i][j]  = calculate_rij(x, y, z, r, i, j);
+                r[i][j]  = calculate_rij(x, y, z, i, j);
 
         
         //poracunamo sile
@@ -54,12 +54,12 @@ void openmp(double* m, double* x, double* y, double* z, double* vx, double* vy, 
             double sum_x = 0.0;
             double sum_y = 0.0;
             double sum_z = 0.0;
-            #pragma omp parallel for reduction(+:sum_x,sum_y,sum_z)
+            #pragma omp parallel for reduction(+:sum_x,sum_y,sum_z) shared(m,x,y,z, r) schedule(static)
             for (j = 0; j < N; j++) //mogoce preverimo ce je hitrej, da je vsaka v svoji for zanki: zarad memori dostopov ...
             {
-                sum_x = calculate_force(m, x, r, i, j);
-                sum_y = calculate_force(m, x, r, i, j);
-                sum_z = calculate_force(m, x, r, i, j); 
+                sum_x += calculate_force(m, x, r, i, j);
+                sum_y += calculate_force(m, y, r, i, j);
+                sum_z += calculate_force(m, z, r, i, j); 
             }
             Fx[i] = -1 * GRAV_CONST * m[i] * sum_x;
             Fy[i] = -1 * GRAV_CONST * m[i] * sum_y;
@@ -67,30 +67,24 @@ void openmp(double* m, double* x, double* y, double* z, double* vx, double* vy, 
         }
 
         //poracunamo nove hitrosti
-        #pragma omp parallel
+        #pragma omp parallel for shared(m, vx, vy, vz, Fx, Fy, Fz) schedule(static)
         for (i = 0; i < N; i++)
+        {
             vx[i] = update_velocity(vx, Fx, m, i);
-        #pragma omp parallel
-        for (i = 0; i < N; i++)
             vy[i] = update_velocity(vy, Fy, m, i);
-        #pragma omp parallel
-        for (i = 0; i < N; i++)
             vz[i] = update_velocity(vz, Fz, m, i);
-
+        }
 
         //poracunamo nove pozicije
-        #pragma omp parallel
+        #pragma omp parallel for shared(m, vx, vy, vz, Fx, Fy, Fz, x, y, z) schedule(static)
         for (i = 0; i < N; i++)
+        {
             x[i] = update_position(x, vx, Fx, m, i);
-        #pragma omp parallel
-        for (i = 0; i < N; i++)
             y[i] = update_position(y, vy, Fy, m, i);
-        #pragma omp parallel
-        for (i = 0; i < N; i++)
             z[i] = update_position(z, vz, Fz, m, i);
-
+        }
         
-        print_iteration(x, y, z, vx, vy, vz, N, iter);
+        //print_iteration(x, y, z, vx, vy, vz, N, iter);
 	}
 
 }

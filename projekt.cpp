@@ -2,7 +2,7 @@
 #include <math.h>
 #include <omp.h>
 #include <stdlib.h>
-#include "init_positions.h"
+#include "base_func.h"
 
 void print_iteration(double* x, double* y, double* z, double* vx, double* vy, double* vz, int N, int iter)
 {

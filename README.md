@@ -2,7 +2,7 @@
 
 Compile as:
 ```
-g++ -o test tes.cpp -fopenmp -lm
+g++ -o projekt projekt.cpp -fopenmp -lm
 ```
 
 Run as:

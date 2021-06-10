@@ -27,7 +27,7 @@ double * _init(int N, double od_, double do_)
 
 double** r_init(int N)
 {
-	int k, l;
+	int k;
 
 	double* bd = (double*)malloc(sizeof(double) * N * N);
 	double** b = (double**)malloc(sizeof(double*) * N);
@@ -42,13 +42,13 @@ double calculate_rij(double* x, double* y, double*z, int i, int j)
 {
     double epsilon = 0.00000000000001;
     
-	return sqrt(pow((x[i] - x[j]),2.0) + pow((y[i] - y[j]),2.0) + pow((z[i] - z[j]),2.0) + epsilon);
+	return sqrt(pow((x[i] - x[j]), 2.0) + pow((y[i] - y[j]), 2.0) + pow((z[i] - z[j]), 2.0) + epsilon);
 }
 
 
 double calculate_force(double* m, double* l, double** r, int i, int j)
 {
-	return m[j] * ((l[i] - l[j])/pow(r[i][j],3.0));
+	return m[j] * ((l[i] - l[j])/pow(r[i][j], 3.0));
 }
 
 

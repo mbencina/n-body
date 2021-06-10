@@ -7,31 +7,31 @@
 void print_iteration(double* x, double* y, double* z, double* vx, double* vy, double* vz, int N, int iter)
 {
     int i;
-    printf("ITERATION %d\n",iter);
+    printf("ITERATION %d\n", iter);
 
     printf("x:  %.2f", x[0]);
     for (i = 1; i < N; i++)
-        printf(", %.2f",x[i]);
+        printf(", %.2f", x[i]);
     
     printf("\ny:  %.2f", y[0]);
     for (i = 1; i < N; i++)
-        printf(", %.2f",y[i]);
+        printf(", %.2f", y[i]);
     
     printf("\nz:  %.2f", z[0]);
     for (i = 1; i < N; i++)
-        printf(", %.2f",z[i]);
+        printf(", %.2f", z[i]);
 
     printf("\nvx: %.2f", vx[0]);
     for (i = 1; i < N; i++)
-        printf(", %.2f",vx[i]);
+        printf(", %.2f", vx[i]);
     
     printf("\nvy: %.2f", vy[0]);
     for (i = 1; i < N; i++)
-        printf(", %.2f",vy[i]);
+        printf(", %.2f", vy[i]);
     
     printf("\nvz: %.2f", vz[0]);
     for (i = 1; i < N; i++)
-        printf(", %.2f",vz[i]);   
+        printf(", %.2f", vz[i]);   
     
     printf("\n");
 }
@@ -54,7 +54,7 @@ void openmp(double* m, double* x, double* y, double* z, double* vx, double* vy, 
             double sum_x = 0.0;
             double sum_y = 0.0;
             double sum_z = 0.0;
-            #pragma omp parallel for reduction(+:sum_x,sum_y,sum_z) shared(m,x,y,z, r) schedule(static)
+            #pragma omp parallel for reduction(+:sum_x,sum_y,sum_z) shared(m,x,y,z,r) schedule(static)
             for (j = 0; j < N; j++) //mogoce preverimo ce je hitrej, da je vsaka v svoji for zanki: zarad memori dostopov ...
             {
                 sum_x += calculate_force(m, x, r, i, j);
@@ -86,7 +86,6 @@ void openmp(double* m, double* x, double* y, double* z, double* vx, double* vy, 
         
         //print_iteration(x, y, z, vx, vy, vz, N, iter);
 	}
-
 }
 
 
@@ -99,7 +98,7 @@ int main(int argc, char *argv[])
 	int N = atoi(argv[1]); // stevilo delcev
     int iteracije = atoi(argv[2]);
 
-    double* m =  _init(N, 1.0, 100.0); //mase
+    double* m =  _init(N, 1.0, 100.0); //mass
     double* x =  _init(N, -10.0, 10.0); //x-koordinate
     double* y =  _init(N, -10.0, 10.0); //y-koordinate
     double* z =  _init(N, -10.0, 10.0); //z-koordinate

@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
 	int N = atoi(argv[1]); // stevilo delcev
     int iteracije = atoi(argv[2]);
 
-    double* m =  _init(N, 1.0, 100.0); //mass
+    double* m =  _init(N, 100000000000.0, 1000000000000.0); //mase
     double* x =  _init(N, -10.0, 10.0); //x-koordinate
     double* y =  _init(N, -10.0, 10.0); //y-koordinate
     double* z =  _init(N, -10.0, 10.0); //z-koordinate

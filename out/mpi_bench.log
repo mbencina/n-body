@@ -1,0 +1,7 @@
+In file included from mpi_impl.c:3:
+base_func.h:4:10: fatal error: random: No such file or directory
+ #include <random>
+          ^~~~~~~~
+compilation terminated.
+slurmstepd: error: execve(): mpi_impl: No such file or directory
+srun: error: nsc-msv014: task 0: Exited with exit code 2

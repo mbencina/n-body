@@ -22,6 +22,7 @@ Run as:
 ```
 sbatch run_mpi.sh
 ```
+You can change the number of bodies and iterations in the file `run_mpi.sh`.
 
 ## Results OpenMP
 ### 10 iterations

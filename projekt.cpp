@@ -84,7 +84,7 @@ void openmp(double* m, double* x, double* y, double* z, double* vx, double* vy, 
             z[i] = update_position(z, vz, Fz, m, i);
         }
         
-        //print_iteration(x, y, z, vx, vy, vz, N, iter);
+        print_iteration(x, y, z, vx, vy, vz, N, iter);
 	}
 }
 

@@ -7,6 +7,7 @@
 
 // distance from center to edge
 #define BOX_LIMIT 500
+#define MIN_MASS 100000000000.0
 
 double if_out_of_bounds_bounce(double i, double* v, int indeks)
 {
@@ -121,11 +122,12 @@ int main(int argc, char *argv[])
     //---------------------------------------------------------------------------
 	int N = atoi(argv[1]); // stevilo delcev
     int iteracije = atoi(argv[2]);
+    srand(157396);
 
-    double* m =  _init(N, 100000000000.0, 1000000000000.0); //mase
-    double* x =  _init(N, 490.0, 510.0); //x-koordinate
-    double* y =  _init(N, 490.0, 510.0); //y-koordinate
-    double* z =  _init(N, 490.0, 510.0); //z-koordinate
+    double* m =  _init(N, MIN_MASS, MIN_MASS * 10); //mase
+    double* x =  _init(N, 200.0, 800.0); //x-koordinate
+    double* y =  _init(N, 200.0, 800.0); //y-koordinate
+    double* z =  _init(N, 200.0, 800.0); //z-koordinate
     double* vx = _init(N, -10.0, 10.0); //hitrost v x-koordinati
     double* vy = _init(N, -10.0, 10.0); //hitrost v y-koordinati
     double* vz = _init(N, -10.0, 10.0); //hitrost v z-koordinati

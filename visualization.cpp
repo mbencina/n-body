@@ -128,9 +128,9 @@ int main(int argc, char *argv[])
     double* x =  _init(N, 200.0, 800.0); //x-koordinate
     double* y =  _init(N, 200.0, 800.0); //y-koordinate
     double* z =  _init(N, 200.0, 800.0); //z-koordinate
-    double* vx = _init(N, -10.0, 10.0); //hitrost v x-koordinati
-    double* vy = _init(N, -10.0, 10.0); //hitrost v y-koordinati
-    double* vz = _init(N, -10.0, 10.0); //hitrost v z-koordinati
+    double* vx = _init(N, -2.0, 2.0); //hitrost v x-koordinati
+    double* vy = _init(N, -2.0, 2.0); //hitrost v y-koordinati
+    double* vz = _init(N, -2.0, 2.0); //hitrost v z-koordinati
 
     double** r = r_init(N);           //inicializiramo prazen array
     

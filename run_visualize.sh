@@ -11,5 +11,5 @@ export OMP_PLACES=cores
 export OMP_PROC_BIND=TRUE
 export OMP_NUM_THREADS=32
 
-# 10000 10
-srun ./visualization 4 5
+# N iters
+srun ./visualization 15 1000

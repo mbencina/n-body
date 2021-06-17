@@ -24,6 +24,20 @@ sbatch run_mpi.sh
 ```
 You can change the number of bodies and iterations in the file `run_mpi.sh`.
 
+## Viusalization data
+To obtain data for the visualization.  
+  
+Compile as:
+```
+g++ -o visualization visualization.cpp -fopenmp -lm
+```
+
+Run as:
+```
+sbatch run_visualize.sh
+```
+
+
 ## Results OpenMP
 ### 10 iterations
 | N           | 1           | 4           | 8           | 16          | 32          |

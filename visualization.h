@@ -11,6 +11,6 @@ void print_positions(double* m, double* x, double* y, double* z, int N, int iter
     int i;
 
     for (i = 0; i < N; i++)
-        printf("%.4f,%.2f,%.2f,%.2f,%d\n", m[i]/MIN_MASS, x[i], y[i], z[i], iter);
+        printf("%d,%.4f,%.2f,%.2f,%.2f,%d\n", i, m[i]/MIN_MASS*100, x[i], y[i], -z[i], iter);
     
 }

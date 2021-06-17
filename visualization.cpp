@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
     // END OF INITIALIZATION
     //---------------------------------------------------------------------------
 
-    printf("m,x,y,z,i\n");
+    printf("ix,m,x,y,z,iter\n");
 	// OpenMP solution
 	double start_openmp = omp_get_wtime();
 	openmp(m, x, y, z, vx, vy, vz, r, Fx, Fy, Fz, N, iteracije);

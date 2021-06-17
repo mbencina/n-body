@@ -7,13 +7,13 @@
 
 // distance from center to edge
 #define BOX_LIMIT 500
-#define MIN_MASS 100000000000.0
+#define MIN_MASS 1000000000000.0
 
 double if_out_of_bounds_bounce(double i, double* v, int indeks)
 {
-    if(i >= 2* BOX_LIMIT) 
+    if (i >= 2 * BOX_LIMIT) 
     {
-        i = BOX_LIMIT;
+        i = 2 * BOX_LIMIT;
         v[indeks] = -1 * v[indeks];
     } else if (i <= 0) 
     {
@@ -122,15 +122,15 @@ int main(int argc, char *argv[])
     //---------------------------------------------------------------------------
 	int N = atoi(argv[1]); // stevilo delcev
     int iteracije = atoi(argv[2]);
-    srand(157396);
+    srand(17);
 
-    double* m =  _init(N, MIN_MASS, MIN_MASS * 10); //mase
-    double* x =  _init(N, 200.0, 800.0); //x-koordinate
-    double* y =  _init(N, 200.0, 800.0); //y-koordinate
-    double* z =  _init(N, 200.0, 800.0); //z-koordinate
-    double* vx = _init(N, -2.0, 2.0); //hitrost v x-koordinati
-    double* vy = _init(N, -2.0, 2.0); //hitrost v y-koordinati
-    double* vz = _init(N, -2.0, 2.0); //hitrost v z-koordinati
+    double* m =  _init(N, MIN_MASS, MIN_MASS * 2); //mase
+    double* x =  _init(N, 100.0, 900.0); //x-koordinate
+    double* y =  _init(N, 100.0, 900.0); //y-koordinate
+    double* z =  _init(N, 100.0, 900.0); //z-koordinate
+    double* vx = _init(N, -1.0, 1.0); //hitrost v x-koordinati
+    double* vy = _init(N, -1.0, 1.0); //hitrost v y-koordinati
+    double* vz = _init(N, -1.0, 1.0); //hitrost v z-koordinati
 
     double** r = r_init(N);           //inicializiramo prazen array
     

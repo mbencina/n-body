@@ -12,4 +12,4 @@ export OMP_PROC_BIND=TRUE
 export OMP_NUM_THREADS=32
 
 # N iters
-srun ./visualization 15 1000
+srun ./visualization 8 1000

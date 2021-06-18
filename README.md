@@ -25,8 +25,15 @@ sbatch run_mpi.sh
 You can change the number of bodies and iterations in the file `run_mpi.sh`.
 
 ## Visualization of data
-### Obtaining data for visualization  
+### Visualize
+You can visualize the provided generated file by running the [visual.pde](/visual/visual.pde) file in the [Processing](https://processing.org/) editor.  
+To use your own generated file (see [next section](#obtaining-data-for-visualization)) change the `filename` variable to your file name (without the `.csv` suffix):
+```
+filename = "your_file_name";
+```
+A demo visualization can be found [here](/visual/demo/demo_visualization.mp4).  
 
+### Obtaining data for visualization  
 You can set parameters (random seed, initial speed span, initial coordinate span (within 0-1000), minimal mass etc.) in the main function of `visualization.cpp`.  
 You can also set the number of iterations and bodies in `run_visualize.sh`.
 Compile as:
@@ -39,14 +46,6 @@ Run as:
 sbatch run_visualize.sh
 ```
 Place the generated `.csv` file you wish to visualize in the `/data` folder.
-
-### Visualize
-You can visualize the generated file by running the [visual.pde](/visual/visual.pde) file in the [Processing](https://processing.org/) editor.  
-To use your own generated file change the `filename` variable to your file name (without the `.csv` suffix):
-```
-filename = "your_file_name";
-```
-A demo visualization can be found [here](/visual/demo/demo_visualization.mp4).  
 
 
 ## Results OpenMP

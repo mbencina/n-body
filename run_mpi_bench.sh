@@ -1,14 +1,14 @@
 #!/bin/bash
-#SBATCH --ntasks=32
-#SBATCH --nodes=1
-#SBATCH --output=out/mpi_slurm_32_1.log
-#SBATCH --time=02:00:00
+#SBATCH --ntasks=4
+#SBATCH --nodes=2
+#SBATCH --output=out/mpi_slurm_4_2.log
+#SBATCH --time=05:00:00
 #SBATCH --reservation=fri
 
 mpicc -lm -o mpi_impl mpi_impl.c
 
-for (( i=15000; i<=30000; i+=5000 ));
+for (( i=5000; i<=30000; i+=5000 ));
 do
   # arguments: N and n_iterations
-  srun --mpi=pmix mpi_impl $i 10 > "out/mpi_bench_p32_n1_$i.log"
+  srun --mpi=pmix mpi_impl $i 10 > "out/mpi_bench_p4_n2_$i.log"
 done

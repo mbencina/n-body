@@ -1,4 +1,4 @@
-# n-body
+# The n-body problem using OpenMP and MPI 
 
 ## OpenMP
 Compile as:

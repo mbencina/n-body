@@ -1,7 +1,5 @@
 # The n-body problem using OpenMP and MPI 
 
-By [van123helsing](https://github.com/van123helsing) and me.
-
 ## OpenMP
 Compile as:
 ```
